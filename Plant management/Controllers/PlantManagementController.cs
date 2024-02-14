@@ -151,10 +151,11 @@ namespace Plant_management.Controllers
                 // Create a dictionary to hold path, size, and type
                 var imageInfo = new Dictionary<string, object>
         {
+            { "pathOfImageId", 0 },
             { "pathOfImage", imagePathFromBE },
             { "size", fileSize },
             { "type", fileType }
-                   
+
 
         };
 
@@ -191,6 +192,13 @@ namespace Plant_management.Controllers
         {
             return plantRepository.GetPlantImageDetails(plantId);
 
+        }
+
+        [Route("/deletingtheimages")]
+        [HttpDelete]
+        public string DeletingTheImagesBasedOnId([FromBody] List<int> arrOfToBeDeletedId)
+        {
+            return plantRepository.DeletingTheImagesBasedOnId(arrOfToBeDeletedId);
         }
 
 

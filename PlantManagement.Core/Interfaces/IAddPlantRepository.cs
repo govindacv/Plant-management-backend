@@ -28,5 +28,9 @@ namespace PlantManagement.Core.Interfaces
 
         List<ImageDetails> GetPlantImageDetails(int plantId);
 
+        string DeletingTheImagesBasedOnId(List<int> arrOfToBeDeletedId);
+
+
+
     }
 }

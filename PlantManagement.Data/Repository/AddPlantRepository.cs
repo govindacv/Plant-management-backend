@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using System.Collections;
+using System.Text.Json;
+using Microsoft.VisualBasic.FileIO;
 
 namespace PlantManagement.Data.Repository
 {
@@ -99,7 +101,7 @@ public int AddPlant(Plant plant)
        public int uploadImage(string file,int plantId)
         {
             DynamicParameters dynamicParameters = new DynamicParameters();
-
+            
             dynamicParameters.Add("FILE", file);
             dynamicParameters.Add("@PLANTID", plantId);
             dynamicParameters.Add("RESULT", dbType: DbType.Int32, direction: ParameterDirection.Output);
@@ -126,10 +128,40 @@ public int AddPlant(Plant plant)
         {
             DynamicParameters dynamicParameters = new DynamicParameters();
             dynamicParameters.Add("PLANTID", plantId);
-
             var result=dBConnection.Query <ImageDetails>("GetPlantImageDetails",dynamicParameters,commandType:CommandType.StoredProcedure).ToList(); 
             return result;
 
         }
+
+      public  string DeletingTheImagesBasedOnId(List<int> arrOfToBeDeletedId)
+        {
+            List<Object> arrOfJSONId = new List<Object>();
+            foreach (int id in arrOfToBeDeletedId)
+            {
+                
+                var JSONId = new Dictionary<string, object>
+            {
+            { "pathOfImageId", id }
+            };
+                arrOfJSONId.Add(JSONId);
+            }
+
+            string json = JsonSerializer.Serialize(arrOfJSONId);
+
+             DynamicParameters dynamicParameters=new DynamicParameters();
+            dynamicParameters.Add("JsonData", json);
+
+            dBConnection.Query("toDeletePlantImages", dynamicParameters, commandType: CommandType.StoredProcedure);
+            return json;
+
+
+            
+
+
+
+        }
+
+
+
     }
 }
