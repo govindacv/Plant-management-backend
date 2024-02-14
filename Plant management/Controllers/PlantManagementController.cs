@@ -119,7 +119,7 @@ namespace Plant_management.Controllers
         public async Task<int> UploadImage(List<IFormFile> formFiles, string plantName)
         {
             List<object> arrOfImages = new List<object>();
-
+            int plantId = int.Parse(plantName);
             string UploadsFolder = Path.Combine(webHostEnvironment.ContentRootPath, "wwwroot", "Uploads", "PlantImages");
 
             if (!Directory.Exists(UploadsFolder))
@@ -129,7 +129,7 @@ namespace Plant_management.Controllers
 
             foreach (var formFile in formFiles)
             {
-                string FileName = formFile.Name;
+                string FileName = Path.GetFileName(formFile.FileName);
                 long fileSize = formFile.Length;
                 string fileType = formFile.ContentType;
 
@@ -154,6 +154,8 @@ namespace Plant_management.Controllers
             { "pathOfImage", imagePathFromBE },
             { "size", fileSize },
             { "type", fileType }
+                   
+
         };
 
                 arrOfImages.Add(imageInfo);
@@ -162,7 +164,7 @@ namespace Plant_management.Controllers
             // Serialize the list of dictionaries
             string json = JsonSerializer.Serialize(arrOfImages);
 
-            return plantRepository.uploadImage(json, plantName);
+            return plantRepository.uploadImage(json, plantId);
         }
 
 
@@ -172,6 +174,23 @@ namespace Plant_management.Controllers
         public int getOTP(string userEmail)
         {
             return userInterface.getOTPOfUser(userEmail);
+        }
+
+        [Route("/getid")]
+        [HttpGet]
+
+        public int GetPlantIdByPlantName(string plantName)
+        {
+            return plantRepository.GetPlantIdByPlantName(plantName);
+        }
+
+        [Route("/getimagedetails")]
+        [HttpGet]
+        public List<ImageDetails> GetPlantImageDetails(int plantId)
+
+        {
+            return plantRepository.GetPlantImageDetails(plantId);
+
         }
 
 

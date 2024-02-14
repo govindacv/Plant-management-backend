@@ -23,6 +23,10 @@ namespace PlantManagement.Core.Interfaces
 
         IList deletePlant(string plantName);
 
-        int uploadImage(string file, string plantName);
+        int uploadImage(string file, int plantId);
+        int GetPlantIdByPlantName(string plantName);
+
+        List<ImageDetails> GetPlantImageDetails(int plantId);
+
     }
 }

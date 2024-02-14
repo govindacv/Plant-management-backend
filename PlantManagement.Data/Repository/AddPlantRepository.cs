@@ -96,18 +96,40 @@ public int AddPlant(Plant plant)
            var result= dBConnection.Query("UpdatePlantStatus", dynamicParameters, commandType: CommandType.StoredProcedure).ToList() ;
             return result ;
         }
-       public int uploadImage(string file,string plantName)
+       public int uploadImage(string file,int plantId)
         {
             DynamicParameters dynamicParameters = new DynamicParameters();
 
             dynamicParameters.Add("FILE", file);
-            dynamicParameters.Add("PLANTNAME", plantName);
+            dynamicParameters.Add("@PLANTID", plantId);
             dynamicParameters.Add("RESULT", dbType: DbType.Int32, direction: ParameterDirection.Output);
 
             dBConnection.Query<int>("updateFile",dynamicParameters,commandType: CommandType.StoredProcedure);
 
             int result = dynamicParameters.Get<int>("RESULT");
             return result;
+        }
+
+
+        public int GetPlantIdByPlantName(string plantName)
+        {
+            DynamicParameters   dynParameters= new DynamicParameters();
+            dynParameters.Add("PLANTNAME", plantName);
+            dynParameters.Add("PLANTID",dbType: DbType.Int32,direction:ParameterDirection.Output);
+
+            dBConnection.Query<int>("getPlantIdByPlantName", dynParameters, commandType: CommandType.StoredProcedure);
+            int result = dynParameters.Get<int>("PLANTID"); 
+            return result;
+        }
+
+        public List<ImageDetails> GetPlantImageDetails(int plantId)
+        {
+            DynamicParameters dynamicParameters = new DynamicParameters();
+            dynamicParameters.Add("PLANTID", plantId);
+
+            var result=dBConnection.Query <ImageDetails>("GetPlantImageDetails",dynamicParameters,commandType:CommandType.StoredProcedure).ToList(); 
+            return result;
+
         }
     }
 }

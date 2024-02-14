@@ -20,5 +20,7 @@ namespace PlantManagement.Core.Interfaces
         int changePassword(ChangePassword changePassword);
 
         int getOTPOfUser(string userEmail);
+
+
     }
 }
