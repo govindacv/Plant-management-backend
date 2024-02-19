@@ -120,7 +120,7 @@ namespace Plant_management.Controllers
         {
             List<object> arrOfImages = new List<object>();
             int plantId = int.Parse(plantName);
-            string UploadsFolder = Path.Combine(webHostEnvironment.ContentRootPath, "wwwroot", "Uploads", "PlantImages");
+            string UploadsFolder = Path.Combine(webHostEnvironment.ContentRootPath, "www", "Uploads", "PlantImages");
 
             if (!Directory.Exists(UploadsFolder))
             {
